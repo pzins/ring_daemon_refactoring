@@ -1062,6 +1062,8 @@ Manager::getCallFromCallID(const std::string& callID) const
 }
 
 //new
+//fonction ayant le même comportement que getCallDetails()
+//mais qui est adaptée à notre implémentation
 CallState_*
 Manager::getCallState(const std::string &callID)
 {
@@ -1104,15 +1106,14 @@ Manager::joinParticipant(const std::string& callId1,
         detachParticipant(callId2);
 
 
+    //début des modifications
+    //récupération des états des calls 1 et 2
     CallState_* call1state = getCallState(callId1);
     CallState_* call2state = getCallState(callId2);
-    //verification if call is nul
+    //verification que les call ne sont pas nuls
     if(!call1state || !call2state)
         return false;
 
-
-    // std::map<std::string, std::string> call1Details(getCallDetails(callId1));
-    // std::map<std::string, std::string> call2Details(getCallDetails(callId2));
 
     std::string current_call_id(getCurrentCallId());
     RING_DBG("Current Call ID %s", current_call_id.c_str());
@@ -1136,51 +1137,16 @@ Manager::joinParticipant(const std::string& callId1,
     getRingBufferPool().unBindAll(callId2);
 
     // Process call1 according to its state
-    // std::string call1_state_str(call1Details.find("CALL_STATE")->second);
-    // RING_DBG("Process call %s state: %s", callId1.c_str(), call1_state_str.c_str());
 
-    // call1->configureConference(conf, callId1, call1_state_str, *this);
-
-    //configuratConference s'occupera de configurer la conference et les if en dessous ne servent plus à rien
+    //configuration de la conference pour callID1
     call1state->configureConference(conf, callId1, this);
-/*
-    if (call1_state_str == "HOLD") {
-        conf->bindParticipant(callId1);
-        offHoldCall(callId1);
-    } else if (call1_state_str == "INCOMING") {
-        conf->bindParticipant(callId1);
-        answerCall(callId1);
-    } else if (call1_state_str == "CURRENT") {
-        conf->bindParticipant(callId1);
-    } else if (call1_state_str == "INACTIVE") {
-        conf->bindParticipant(callId1);
-        answerCall(callId1);
-    } else
-        RING_WARN("Call state not recognized");
-*/
+
 
 
     // Process call2 according to its state
-    // std::string call2_state_str(call2Details.find("CALL_STATE")->second);
-    // RING_DBG("Process call %s state: %s", callId2.c_str(), call2_state_str.c_str());
 
-    //configuratConference s'occupera de configurer la conference et les if en dessous ne servent plus à rien
+    //configuration de la conference pour callID2
     call2state->configureConference(conf, callId2, this); 
-/*
-    if (call2_state_str == "HOLD") {
-        conf->bindParticipant(callId2);
-        offHoldCall(callId2);
-    } else if (call2_state_str == "INCOMING") {
-        conf->bindParticipant(callId2);
-        answerCall(callId2);
-    } else if (call2_state_str == "CURRENT") {
-        conf->bindParticipant(callId2);
-    } else if (call2_state_str == "INACTIVE") {
-        conf->bindParticipant(callId2);
-        answerCall(callId2);
-    } else
-        RING_WARN("Call state not recognized");
-*/
 
 
     // Switch current call id to this conference

@@ -208,6 +208,7 @@ Call::setState(ConnectionState cnx_state, signed code)
 
 
 //new
+//définition des méthodes des nouvelles classes représentant les états des Calls
 void CallState_::configureConference(std::shared_ptr<Conference>& conf, 
         const std::string& callId, Manager* manager){
         RING_WARN("Call state not recognized");
@@ -271,6 +272,9 @@ const std::string FailureCall::getState() const {
 
 
 //new
+//restructuration de la fonction joinParticipant() en ajoutant deux nouvelles fonctions
+//onActiveState() et on InactiveState() afin de réduire la complexité cyclomatique de joinParticipant()
+//et adaptation des  trois fonctions pour notre patron State
 std::pair<std::string, CallState_*>
 Call::onActiveState(Call::ConnectionState connectionState_) const
 {
@@ -402,6 +406,10 @@ Call::toggleRecording()
 }
 
 //new
+//fonction ayant le même objectif que getDetails() mais qui se concentre
+//uniquement sur nos besoins : l'état des Calls
+//d'ailleurs dans le code initial, une map complète était renvoyée alors que seul le champs
+//DRing::Call::Details::CALL_STATE était réellement utilisé
 CallState_*
 Call::getCallState()
 {

@@ -56,6 +56,8 @@ class AccountVideoCodecInfo;
 class Manager;
 
 //new
+//déclaration des classes représentatn les états des calls
+//pour notre patron State
 class CallState_ {
 public:
 
@@ -112,6 +114,8 @@ class FailureCall : public CallState_ {
 public:
     virtual const std::string getState() const ;
 };
+
+
 
 template <class T> using CallMap = std::map<std::string, std::shared_ptr<T> >;
 
