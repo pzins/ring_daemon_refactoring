@@ -32,6 +32,7 @@
 #include "recordable.h"
 #include "ip_utils.h"
 #include "ice_transport.h"
+#include "conference.h"
 
 #include <mutex>
 #include <map>
@@ -41,23 +42,16 @@
 #include <condition_variable>
 #include <set>
 #include <list>
-
-//new
-#include "conference.h"
 #include <utility>
+
 
 namespace ring {
 
 class VoIPLink;
 class Account;
 class AccountVideoCodecInfo;
-
-//new
 class Manager;
 
-//new
-//déclaration des classes représentatn les états des calls
-//pour notre patron State
 class CallState_ {
 public:
 
@@ -114,8 +108,6 @@ class FailureCall : public CallState_ {
 public:
     virtual const std::string getState() const ;
 };
-
-
 
 template <class T> using CallMap = std::map<std::string, std::shared_ptr<T> >;
 

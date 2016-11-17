@@ -1061,9 +1061,6 @@ Manager::getCallFromCallID(const std::string& callID) const
     return callFactory.getCall(callID);
 }
 
-//new
-//fonction ayant le même comportement que getCallDetails()
-//mais qui est adaptée à notre implémentation
 CallState_*
 Manager::getCallState(const std::string &callID)
 {
@@ -1106,11 +1103,10 @@ Manager::joinParticipant(const std::string& callId1,
         detachParticipant(callId2);
 
 
-    //début des modifications
-    //récupération des états des calls 1 et 2
     CallState_* call1state = getCallState(callId1);
     CallState_* call2state = getCallState(callId2);
-    //verification que les call ne sont pas nuls
+
+    //test if call1 or call2 is nul
     if(!call1state || !call2state)
         return false;
 
@@ -1137,15 +1133,11 @@ Manager::joinParticipant(const std::string& callId1,
     getRingBufferPool().unBindAll(callId2);
 
     // Process call1 according to its state
-
-    //configuration de la conference pour callID1
+    //configure conference with call1
     call1state->configureConference(conf, callId1, this);
 
-
-
     // Process call2 according to its state
-
-    //configuration de la conference pour callID2
+    //configure conference with call2
     call2state->configureConference(conf, callId2, this); 
 
 
